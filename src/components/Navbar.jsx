@@ -3,7 +3,11 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
   const navigate = useNavigate();
+<<<<<<< HEAD
   const token = "csdcsz";
+=======
+  const token = "cjsd "
+>>>>>>> 5ba93081f38fee76edfb87c506438af0fdfb8e3d
 
   const handleLogout = () => {
     localStorage.removeItem('token');
