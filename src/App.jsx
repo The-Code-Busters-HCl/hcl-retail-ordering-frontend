@@ -9,6 +9,7 @@ import Orders from './pages/Orders';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import PrivateRoute from './components/PrivateRoute';
+import AddItem from './pages/AddItem';
 
 const App = () => {
   return (
@@ -18,6 +19,9 @@ const App = () => {
           <Route index element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+
+    {/* ✅ ADD THIS */}
+          <Route path="/add/item" element={<AddItem />} />
           
           <Route 
             path="/products" 
