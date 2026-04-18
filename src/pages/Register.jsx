@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 const Register = () => {
   const navigate = useNavigate();
 
@@ -11,10 +11,10 @@ const Register = () => {
 
   // ✅ single state for entire form
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    address: ''
+    name: "",
+    email: "",
+    password: "",
+    address: "",
   });
 
   const handleChange = (e) => {
@@ -22,47 +22,57 @@ const Register = () => {
 
     setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  console.log('Form Data:', formData);
+    // ✅ Password validation
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[@!#$%^&*]).{8,}$/;
 
-  try {
-    const response = await axios.post(
-      'http://localhost:8080/api/signup',
-      formData
-    );
+    if (!passwordRegex.test(formData.password)) {
+      alert(
+        "Password must be at least 8 characters long, include 1 uppercase letter and 1 special character (including @)",
+      );
+      return;
+    }
 
-    // ✅ success (same behavior)
-    setShowAlert(true);
+    setLoading(true);
 
-    setTimeout(() => {
-      navigate('/login');
-    }, 2000);
+    console.log("Form Data:", formData);
 
-  } catch (error) {
-    console.error(error);
-    alert('Error: Unable to register'); // unchanged behavior
-  } finally {
-    setLoading(false);
-  }
-};
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/api/signup",
+        formData,
+      );
 
+      setShowAlert(true);
+
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
+    } catch (error) {
+      console.error(error);
+      alert("Error: Unable to register");
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="container mt-5">
       <div className="col-md-6 mx-auto">
         <div className="card p-4 shadow">
-
           <h2 className="text-center mb-4">Register</h2>
 
           {/* ✅ Bootstrap Alert */}
           {showAlert && (
-            <div className="alert alert-success alert-dismissible fade show" role="alert">
+            <div
+              className="alert alert-success alert-dismissible fade show"
+              role="alert"
+            >
               User registered successfully! Please login now.
               <button
                 type="button"
@@ -73,7 +83,6 @@ const Register = () => {
           )}
 
           <form onSubmit={handleSubmit}>
-
             <div className="mb-3">
               <label className="form-label">Name</label>
               <input
@@ -130,11 +139,9 @@ const Register = () => {
               className="btn btn-primary w-100"
               disabled={loading}
             >
-              {loading ? 'Submitting...' : 'Submit'}
+              {loading ? "Submitting..." : "Submit"}
             </button>
-
           </form>
-
         </div>
       </div>
     </div>
