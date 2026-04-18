@@ -36,6 +36,9 @@ const Navbar = () => {
             </li>
             {token ? (
               <>
+              <li className="nav-item">
+                  <NavLink className="nav-link" to="/add/item">Add Item</NavLink>
+                </li>
                 <li className="nav-item">
                   <NavLink className="nav-link" to="/cart">Cart</NavLink>
                 </li>
