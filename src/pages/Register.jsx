@@ -1,50 +1,140 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
   const navigate = useNavigate();
+
   const [loading, setLoading] = useState(false);
 
-  const handleRegister = (e) => {
-    e.preventDefault();
-    setLoading(true);
-    
-    // Simulate API call
-    setTimeout(() => {
-      localStorage.setItem('token', 'fake-jwt-token');
-      setLoading(false);
-      navigate('/dashboard');
-    }, 1000);
+  // ✅ alert state added
+  const [showAlert, setShowAlert] = useState(false);
+
+  // ✅ single state for entire form
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    address: ''
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+
+  console.log('Form Data:', formData);
+
+  try {
+    const response = await axios.post(
+      'http://localhost:8080/api/signup',
+      formData
+    );
+
+    // ✅ success (same behavior)
+    setShowAlert(true);
+
+    setTimeout(() => {
+      navigate('/login');
+    }, 2000);
+
+  } catch (error) {
+    console.error(error);
+    alert('Error: Unable to register'); // unchanged behavior
+  } finally {
+    setLoading(false);
+  }
+};
+
   return (
-    <div className="row justify-content-center">
-      <div className="col-md-6 col-lg-4">
-        <div className="card shadow-sm mt-5">
-          <div className="card-body p-4">
-            <h2 className="text-center mb-4">Register</h2>
-            <form onSubmit={handleRegister}>
-              <div className="mb-3">
-                <label className="form-label">Full Name</label>
-                <input type="text" className="form-control" required placeholder="John Doe" />
-              </div>
-              <div className="mb-3">
-                <label className="form-label">Email address</label>
-                <input type="email" className="form-control" required placeholder="name@example.com" />
-              </div>
-              <div className="mb-3">
-                <label className="form-label">Password</label>
-                <input type="password" className="form-control" required placeholder="Create a password" />
-              </div>
-              <button disabled={loading} type="submit" className="btn btn-primary w-100 mb-3">
-                {loading ? 'Creating account...' : 'Create Account'}
-              </button>
-              <div className="text-center">
-                <span className="text-muted">Already have an account? </span>
-                <Link to="/login" className="text-decoration-none">Log in</Link>
-              </div>
-            </form>
-          </div>
+    <div className="container mt-5">
+      <div className="col-md-6 mx-auto">
+        <div className="card p-4 shadow">
+
+          <h2 className="text-center mb-4">Register</h2>
+
+          {/* ✅ Bootstrap Alert */}
+          {showAlert && (
+            <div className="alert alert-success alert-dismissible fade show" role="alert">
+              User registered successfully! Please login now.
+              <button
+                type="button"
+                className="btn-close"
+                onClick={() => setShowAlert(false)}
+              ></button>
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit}>
+
+            <div className="mb-3">
+              <label className="form-label">Name</label>
+              <input
+                type="text"
+                name="name"
+                className="form-control"
+                placeholder="Enter your name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="mb-3">
+              <label className="form-label">Email</label>
+              <input
+                type="email"
+                name="email"
+                className="form-control"
+                placeholder="Enter your email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="mb-3">
+              <label className="form-label">Password</label>
+              <input
+                type="password"
+                name="password"
+                className="form-control"
+                placeholder="Enter password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="mb-3">
+              <label className="form-label">Address</label>
+              <textarea
+                name="address"
+                className="form-control"
+                placeholder="Enter your address"
+                value={formData.address}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="btn btn-primary w-100"
+              disabled={loading}
+            >
+              {loading ? 'Submitting...' : 'Submit'}
+            </button>
+
+          </form>
+
         </div>
       </div>
     </div>
