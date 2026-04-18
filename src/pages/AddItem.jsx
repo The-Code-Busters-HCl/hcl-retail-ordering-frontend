@@ -1,39 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 const AddItem = () => {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [price, setPrice] = useState('');
-  const [category, setCategory] = useState('pizza');
-  const [image, setImage] = useState('');
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState("");
+  const [stock, setStock] = useState(""); // ✅ added
+  const [category, setCategory] = useState("pizza");
+  const [image, setImage] = useState("");
 
-  const categories = ['pizza', 'drinks', 'bread', 'dessert'];
+  const categories = ["pizza", "drinks", "bread", "dessert"];
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const newItem = {
-      id: Date.now(),
       name,
-      description,
       price: parseFloat(price),
+      stock: parseInt(stock),
       category,
-      img: image
+      image, // ✅ correct key
     };
 
-    const existingItems = JSON.parse(localStorage.getItem('items') || '[]');
-    existingItems.push(newItem);
-    localStorage.setItem('items', JSON.stringify(existingItems));
+    try {
+      const token = localStorage.getItem("token");
 
-    console.log("New Item Added:", newItem);
-    alert("Item added successfully!");
+      const response = await fetch("http://localhost:8145/product", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(newItem),
+      });
 
-    // Reset form
-    setName('');
-    setDescription('');
-    setPrice('');
-    setCategory('pizza');
-    setImage('');
+      if (!response.ok) {
+        throw new Error("Failed to add item");
+      }
+
+      alert("Item added successfully!");
+
+      // Reset form
+      setName("");
+      setPrice("");
+      setStock("");
+      setCategory("pizza");
+      setImage("");
+
+    } catch (error) {
+      console.error(error);
+      alert("Error adding item");
+    }
   };
 
   return (
@@ -54,18 +69,6 @@ const AddItem = () => {
           />
         </div>
 
-        {/* Description */}
-        <div className="mb-3">
-          <label className="form-label">Description</label>
-          <input
-            type="text"
-            className="form-control"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
-          />
-        </div>
-
         {/* Price */}
         <div className="mb-3">
           <label className="form-label">Price</label>
@@ -74,6 +77,18 @@ const AddItem = () => {
             className="form-control"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
+            required
+          />
+        </div>
+
+        {/* ✅ Stock (new UI) */}
+        <div className="mb-3">
+          <label className="form-label">Stock</label>
+          <input
+            type="number"
+            className="form-control"
+            value={stock}
+            onChange={(e) => setStock(e.target.value)}
             required
           />
         </div>
@@ -112,7 +127,7 @@ const AddItem = () => {
             <img
               src={image}
               alt="Preview"
-              style={{ width: '150px', height: '150px', objectFit: 'cover' }}
+              style={{ width: "150px", height: "150px", objectFit: "cover" }}
               className="rounded"
             />
           </div>
@@ -121,7 +136,6 @@ const AddItem = () => {
         <button type="submit" className="btn btn-primary w-100">
           Add Item
         </button>
-
       </form>
     </div>
   );

@@ -6,8 +6,8 @@ const Login = () => {
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState("demo@example.com");
-  const [password, setPassword] = useState("Password@123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   // ✅ Strong Password Validation
@@ -53,7 +53,7 @@ const Login = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:8080/api/login', {
+      const response = await axios.post('http://localhost:8145/auth/login', {
         email,
         password
       });
@@ -62,7 +62,7 @@ const Login = () => {
       localStorage.setItem('token', response.data.token);
 
       // ✅ Redirect after login
-      navigate('/dashboard');
+      navigate('/products');
 
     } catch (err) {
       console.error(err);

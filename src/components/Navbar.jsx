@@ -3,11 +3,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
   const navigate = useNavigate();
-<<<<<<< HEAD
-  const token = "csdcsz";
-=======
-  const token = "cjsd "
->>>>>>> 5ba93081f38fee76edfb87c506438af0fdfb8e3d
+  const token = localStorage.getItem('token');
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -17,7 +13,7 @@ const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
       <div className="container">
-        <Link className="navbar-brand" to="/">HackApp</Link>
+        <Link className="navbar-brand" to="/">Retail Ordering</Link>
         <button 
           className="navbar-toggler" 
           type="button" 
@@ -41,7 +37,7 @@ const Navbar = () => {
             {token ? (
               <>
               <li className="nav-item">
-                  <NavLink className="nav-link" to="/add/item">Add Item</NavLink>
+                  <NavLink className="nav-link" to="/additem">Add Item</NavLink>
                 </li>
                 <li className="nav-item">
                   <NavLink className="nav-link" to="/cart">Cart</NavLink>

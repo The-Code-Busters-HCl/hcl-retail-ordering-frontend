@@ -14,7 +14,7 @@ const Register = () => {
     name: "",
     email: "",
     password: "",
-    address: "",
+    role: "",
   });
 
   const handleChange = (e) => {
@@ -45,7 +45,7 @@ const Register = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/signup",
+        "http://localhost:8145/auth/register",
         formData,
       );
 
@@ -123,12 +123,12 @@ const Register = () => {
             </div>
 
             <div className="mb-3">
-              <label className="form-label">Address</label>
+              <label className="form-label">Role</label>
               <textarea
-                name="address"
+                name="role"
                 className="form-control"
-                placeholder="Enter your address"
-                value={formData.address}
+                placeholder="Enter your role"
+                value={formData.role}
                 onChange={handleChange}
                 required
               />

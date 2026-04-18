@@ -63,7 +63,7 @@ const Cart = () => {
       quantity: item.quantity
     }));
 
-    const response = await fetch('http://localhost:8080/api/order/placeorder', {
+    const response = await fetch('http://localhost:8145/order/place', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

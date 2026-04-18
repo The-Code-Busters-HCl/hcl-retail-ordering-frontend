@@ -1,53 +1,63 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
 import MainLayout from './layout/MainLayout';
 import Home from './pages/Home';
-import Dashboard from './pages/Dashboard'; // Keeping just in case, but unused
 import Products from './pages/Products';
 import Cart from './pages/Cart';
 import Orders from './pages/Orders';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import PrivateRoute from './components/PrivateRoute';
 import AddItem from './pages/AddItem';
+import PrivateRoute from './components/PrivateRoute';
 
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<MainLayout />}>
-          <Route index element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
 
-    {/* ✅ ADD THIS */}
-          <Route path="/add/item" element={<AddItem />} />
-          
+        {/* Layout wrapper */}
+        <Route path="/" element={<MainLayout />}>
+
+          {/* Public Routes */}
+          <Route index element={<Home />} />
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
+
+          {/* Products (public or protected — your choice) */}
+          <Route path="products" element={<Products />} />
+
+          {/* Protected Routes */}
           <Route 
-            path="/products" 
+            path="cart" 
             element={
-             
-                <Products />
-              
-            } 
-          />
-          <Route 
-            path="/cart" 
-            element={
-              // <PrivateRoute>
+              <PrivateRoute>
                 <Cart />
-              // </PrivateRoute>
+              </PrivateRoute>
             } 
           />
+
           <Route 
-            path="/orders" 
+            path="orders" 
             element={
-              // <PrivateRoute>
+              <PrivateRoute>
                 <Orders />
-              // </PrivateRoute>
+              </PrivateRoute>
             } 
           />
+
+          {/* Admin / Add Item */}
+          <Route 
+            path="additem"   // ✅ FIXED URL
+            element={
+              <PrivateRoute>
+                <AddItem />
+              </PrivateRoute>
+            } 
+          />
+
         </Route>
+
       </Routes>
     </BrowserRouter>
   );
